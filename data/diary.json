@@ -1,0 +1,26 @@
+{
+  "name": "Tarot Diary",
+  "entries": [
+    {
+      "id": "6e7b7a1d-9f8d-4f3a-8e8b-3f3a5f6e7b7a",
+      "date": "2019-01-01",
+      "cardIds": [1, 2, 3],
+      "question": "What should I focus on today?",
+      "interpretation": "The cards suggest that you should focus on your career today."
+    },
+    {
+      "id": "8e8b3f3a-9f8d-4f3a-6e7b-6e7b7a1d9f8d",
+      "date": "2019-01-02",
+      "cardIds": [4, 5, 6],
+      "question": "What will help me find love today?",
+      "interpretation": "Go out and meet new people."
+    },
+    {
+      "id": "9f8d4f3a-6e7b-6e7b-7a1d-8e8b3f3a9f8d",
+      "date": "2019-01-03",
+      "cardIds": [7, 8, 9],
+      "question": "What should I do to improve my health?",
+      "interpretation": "The cards suggest that you should focus on your diet."
+    }
+  ]
+}
