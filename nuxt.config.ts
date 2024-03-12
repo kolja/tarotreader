@@ -1,6 +1,14 @@
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  modules: ['@sidebase/nuxt-auth', '@nuxt/ui', '@pinia/nuxt'],
+  ssr: false,
+  css: ['~/assets/css/tarot.css'],
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true
+    }
+  },
+  modules: ['@sidebase/nuxt-auth', '@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt'],
   colorMode: {
     preference: 'light' // default: system
   },
@@ -17,4 +25,3 @@ export default defineNuxtConfig({
           CLIENT_SECRET: process.env.CLIENT_SECRET
   }
 })
-
