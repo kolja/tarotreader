@@ -9,14 +9,7 @@
       <h1>{{ username }}'s Tarot Diary</h1>
       <ul>
         <li v-for="entry in diary.entries" :key="entry.id" class="entry">
-          <UCard class="mb-3">
-
-            <strong>{{ format(entry.date, 'MMM do, yyyy')}}</strong>
-            <UButton class="ml-5" icon="i-heroicons-pencil-solid" @click="goToDiaryEntry(entry.id)"></UButton>
-            <pre>{{ entry.cardIds }}</pre>
-            <p>{{ entry.question }}</p>
-            <p>{{ entry.interpretation }}</p>
-          </UCard>
+          <diaryEntry :entry="entry" @editDiaryEntry="editDiaryEntry"/>
         </li>
       </ul>
     </UContainer>
@@ -49,7 +42,7 @@
     })
   }
 
-  function goToDiaryEntry(id: string) {
+  function editDiaryEntry(id: string) {
     router.push(`/${username}/${id}`)
   }
 
