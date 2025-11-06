@@ -1,0 +1,32 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: tarotreader-frontend
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tarotreader-frontend.rule=Host(`${FRONTEND_HOST}`)"
+      - "traefik.http.routers.tarotreader-frontend.entrypoints=websecure"
+      - "traefik.http.services.tarotreader-frontend.loadbalancer.server.port=${FRONTEND_PORT}"
+      - "traefik.http.routers.tarotreader-frontend.tls.certresolver=cloudflare"
+
+  backend:
+    build:
+      context: ./backend
+    container_name: tarotreader-backend
+    restart: unless-stopped
+    networks:
+      - traefik_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tarotreader-backend.rule=Host(`${BACKEND_HOST}`)"
+      - "traefik.http.routers.tarotreader-backend.entrypoints=websecure"
+      - "traefik.http.services.tarotreader-backend.loadbalancer.server.port=${BACKEND_PORT}"
+      - "traefik.http.routers.tarotreader-backend.tls.certresolver=cloudflare"
+
+networks:
+  traefik_default:
+    external: true
