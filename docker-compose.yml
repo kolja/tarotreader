@@ -1,32 +1,40 @@
-services:
-  frontend:
-    build:
-      context: ./frontend
-    container_name: tarotreader-frontend
-    restart: unless-stopped
-    networks:
-      - traefik_default
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.tarotreader-frontend.rule=Host(`${FRONTEND_HOST}`)"
-      - "traefik.http.routers.tarotreader-frontend.entrypoints=websecure"
-      - "traefik.http.services.tarotreader-frontend.loadbalancer.server.port=${FRONTEND_PORT}"
-      - "traefik.http.routers.tarotreader-frontend.tls.certresolver=cloudflare"
+# Simplified Docker Compose for Tarot Reader
+# Backend (Rust + Rocket) and Frontend (Vue.js) only
 
+services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
     container_name: tarotreader-backend
     restart: unless-stopped
+    environment:
+      ROCKET_ADDRESS: 0.0.0.0
+      ROCKET_PORT: 8000
+      ROCKET_LOG_LEVEL: normal
+      RUST_LOG: info
+    ports:
+      - "8000:8000"
     networks:
-      - traefik_default
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.tarotreader-backend.rule=Host(`${BACKEND_HOST}`)"
-      - "traefik.http.routers.tarotreader-backend.entrypoints=websecure"
-      - "traefik.http.services.tarotreader-backend.loadbalancer.server.port=${BACKEND_PORT}"
-      - "traefik.http.routers.tarotreader-backend.tls.certresolver=cloudflare"
+      - tarotreader-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8000
+    container_name: tarotreader-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - tarotreader-network
 
 networks:
-  traefik_default:
-    external: true
+  tarotreader-network:
+    driver: bridge

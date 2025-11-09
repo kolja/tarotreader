@@ -1,0 +1,46 @@
+# Production Docker Compose configuration for Traefik deployment
+# Backend (Rust + Rocket) and Frontend (Vue.js) only - no database
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-https://api.tarotreader.example.com}
+    container_name: tarotreader-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-https://api.tarotreader.example.com}
+    networks:
+      - traefik_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tarotreader-frontend.rule=Host(`${FRONTEND_HOST}`)"
+      - "traefik.http.routers.tarotreader-frontend.entrypoints=websecure"
+      - "traefik.http.services.tarotreader-frontend.loadbalancer.server.port=80"
+      - "traefik.http.routers.tarotreader-frontend.tls.certresolver=cloudflare"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tarotreader-backend
+    restart: unless-stopped
+    environment:
+      ROCKET_ADDRESS: 0.0.0.0
+      ROCKET_PORT: 8000
+      ROCKET_LOG_LEVEL: ${ROCKET_LOG_LEVEL:-normal}
+      RUST_LOG: ${RUST_LOG:-info}
+    networks:
+      - traefik_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tarotreader-backend.rule=Host(`${BACKEND_HOST}`)"
+      - "traefik.http.routers.tarotreader-backend.entrypoints=websecure"
+      - "traefik.http.services.tarotreader-backend.loadbalancer.server.port=8000"
+      - "traefik.http.routers.tarotreader-backend.tls.certresolver=cloudflare"
+
+networks:
+  traefik_default:
+    external: true

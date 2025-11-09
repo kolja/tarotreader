@@ -2,8 +2,6 @@
 # Environment variables
 .env
 
-# Node dependencies
 frontend/node_modules
-
-# Rust build artifacts
 backend/target
+compose.override.yaml

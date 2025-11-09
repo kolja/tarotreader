@@ -1,5 +1,26 @@
-
-# Ignore Rust build artifacts
+# CRITICAL: Exclude target directory
 target
+**/target
+
+# Environment
 .env
+.env.*
+
+# Editor
+.vscode
+.idea
 .DS_Store
+*.swp
+
+# Git
+.git
+.gitignore
+
+# Temp files
+*.tmp
+tmp
+temp
+
+# Docker files
+Dockerfile
+.dockerignore
